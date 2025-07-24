@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,7 +14,10 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        $clients = Client::all();
+        // Optionnel: charger les relations pour éviter N+1 query problem
+        // $clients = Client::with(['carte', 'abonnements.formule'])->get();
+        return response()->json($clients);
     }
 
     /**
@@ -21,7 +25,8 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        try{
+            $request->validate([
             'nom' => 'required|string|max:255',
             'age' => 'required|integer|min:0',
             'taille' => 'nullable|integer|min:0',
@@ -29,6 +34,13 @@ class ClientController extends Controller
 
         $client = Client::create($request->all());
         return response()->json($client,Response::HTTP_CREATED);
+        }catch(Exception $e){
+            return response()->json([
+                'message' => 'Les données fournies sont invalides.',
+                'errors' => $e->getMessage()
+            ], Response::HTTP_UNPROCESSABLE_ENTITY); 
+        }
+
     }
 
     /**

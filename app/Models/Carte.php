@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Carte extends Model
 {
      use HasFactory;
+     public $timestamps = false; 
 
      protected $fillable = [
         'client_id',

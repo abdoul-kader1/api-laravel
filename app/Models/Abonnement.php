@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Abonnement extends Model
 {
     use HasFactory;
+    
+    public $timestamps = false; 
 
     protected $fillable = [
         'client_id',

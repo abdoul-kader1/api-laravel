@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Formule extends Model
 {
     use HasFactory;
+    public $timestamps = false; 
 
      protected $fillable = [
         'type_formule',
