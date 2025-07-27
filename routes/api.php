@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController; // Assure-toi que cette ligne est présente
+use App\Http\Controllers\FormuleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -9,9 +10,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Tes routes de ressources pour le client
+// routes de ressources pour le client
 Route::post('clients/create', [ClientController::class,"store"]);
 Route::get('clients/liste', [ClientController::class,"index"]);
 Route::get('clients/{id}', [ClientController::class,"show"]);
 Route::put('clients/{id}/update',[ClientController::class,"update"]);
 Route::delete("clients/{id}/delete",[ClientController::class,"destroy"]);
+
+// routes de ressources pour la formule
+Route::post('formules/create', [FormuleController::class,"store"]);
+Route::get('formules/liste', [FormuleController::class,"index"]);
+Route::get('formules/{id}', [FormuleController::class,"show"]);
+Route::put('formules/{id}/update',[FormuleController::class,"update"]);
+Route::delete("formules/{id}/delete",[FormuleController::class,"destroy"]);
