@@ -17,7 +17,7 @@ class ClientController extends Controller
         $clients = Client::all();
         // Optionnel: charger les relations pour éviter N+1 query problem
         // $clients = Client::with(['carte', 'abonnements.formule'])->get();
-        return response()->json($clients);
+        return response()->json(["reponse"=>$clients],Response::HTTP_OK);
     }
 
     /**
@@ -32,13 +32,23 @@ class ClientController extends Controller
             'taille' => 'nullable|integer|min:0',
         ]);
 
-        $client = Client::create($request->all());
-        return response()->json($client,Response::HTTP_CREATED);
+        $nom = $request->input("nom");
+
+        $clientBdd = Client::whereNom($nom)->first();
+
+        if(!$clientBdd){
+            $client = Client::create($request->all());
+            return response()->json(
+                ['reponse'=>$client],
+                Response::HTTP_CREATED
+            );
+        }else{
+            return response()->json(["erreur"=>"Un client a déjà ce nom"],Response::HTTP_BAD_REQUEST);
+        }
         }catch(Exception $e){
             return response()->json([
-                'message' => 'Les données fournies sont invalides.',
-                'errors' => $e->getMessage()
-            ], Response::HTTP_UNPROCESSABLE_ENTITY); 
+                'erreur' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST); 
         }
 
     }
@@ -48,7 +58,18 @@ class ClientController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
+        $clientBdd = Client::whereId($id)->first();
+        if($clientBdd){
+            return response()->json([
+                "reponse"=>$clientBdd
+            ],Response::HTTP_OK);
+        }else{
+             return response()->json([
+                "erreur"=>"id du client incorrect"
+            ],Response::HTTP_BAD_REQUEST);
+        }
+    
     }
 
     /**
@@ -56,7 +77,30 @@ class ClientController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $clientBdd = Client::whereId($id)->first();
+        if($clientBdd){
+
+             $champValider = $request->validate([
+            'age' => 'required|integer|min:0',
+            'taille' => 'nullable|integer|min:0',
+        ]);
+        
+         $clientBdd->update([
+            "age"=>$champValider['age'],
+            "taille"=>$champValider['taille']
+        ]);
+
+        return response()->json([
+            "reponse"=>$clientBdd,
+        ],Response::HTTP_OK);
+
+        }else{
+             return response()->json([
+                "erreur"=>"id du client incorrect"
+            ],Response::HTTP_BAD_REQUEST);
+        }
+
     }
 
     /**
@@ -64,6 +108,14 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $clientBdd = Client::whereId($id)->first();
+        if($clientBdd){
+            $clientBdd->delete($id);
+             return response()->json(null,Response::HTTP_OK);
+        }else{
+            return response()->json([
+                "erreur"=>"id du client incorrect"
+            ],Response::HTTP_BAD_REQUEST);
+        }
     }
 }

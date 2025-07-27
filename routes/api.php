@@ -10,4 +10,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Tes routes de ressources pour le client
-Route::apiResource('clients', ClientController::class);
+Route::post('clients/create', [ClientController::class,"store"]);
+Route::get('clients/liste', [ClientController::class,"index"]);
+Route::get('clients/{id}', [ClientController::class,"show"]);
+Route::put('clients/{id}/update',[ClientController::class,"update"]);
+Route::delete("clients/{id}/delete",[ClientController::class,"destroy"]);
