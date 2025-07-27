@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CarteController;
 use App\Http\Controllers\ClientController; // Assure-toi que cette ligne est présente
 use App\Http\Controllers\FormuleController;
 use Illuminate\Http\Request;
@@ -23,3 +24,9 @@ Route::get('formules/liste', [FormuleController::class,"index"]);
 Route::get('formules/{id}', [FormuleController::class,"show"]);
 Route::put('formules/{id}/update',[FormuleController::class,"update"]);
 Route::delete("formules/{id}/delete",[FormuleController::class,"destroy"]);
+
+// routes de ressources pour la carte
+Route::post('carte/create/client/{id}', [CarteController::class,"store"]);
+Route::get("carte/liste",[CarteController::class,"index"]);
+Route::put("carte/{idCarte}/client/{idClient}/update",[CarteController::class,"update"]);
+Route::get("carte/client/{idClient}/liste",[CarteController::class,"show"]);

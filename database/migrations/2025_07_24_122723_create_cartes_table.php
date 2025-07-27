@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cartes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
-            $table->string('non');
+            $table->string('nom');
             $table->boolean('actif')->default(false);
         });
     }
