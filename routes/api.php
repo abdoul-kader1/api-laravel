@@ -35,3 +35,4 @@ Route::get("carte/client/{idClient}/liste",[CarteController::class,"show"]);
 
 // routes de ressources pour l'abonnement
 Route::post('abonnements/create', [AbonnementController::class,"store"]);
+Route::get('abonnements/{id}/isExpire', [AbonnementController::class,"verifieAbonnementClient"]);

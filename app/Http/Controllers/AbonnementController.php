@@ -66,6 +66,21 @@ class AbonnementController extends Controller
         
     }
 
+    public function verifieAbonnementClient(string $id){
+        $abonnement = Abonnement::whereId($id)->first();
+       if($abonnement){
+         //$dateDebut = Carbon::now();
+       $resultat = $abonnement->date_fin->isPast();
+          return response()->json([
+                "response"=>$resultat
+            ],Response::HTTP_OK);
+       }else{
+        return response()->json([
+                "erreur"=>"id abonnement incorrect"
+            ],Response::HTTP_BAD_REQUEST);
+       }
+    }
+
     /**
      * Display the specified resource.
      */
